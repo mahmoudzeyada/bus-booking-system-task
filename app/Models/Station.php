@@ -13,7 +13,7 @@ class Station extends Model
         'name',
     ];
 
-    public function stations()
+    public function trips()
     {
         return $this->belongsToMany('App\Models\Trip')->using('App\Models\TripStation');
     }

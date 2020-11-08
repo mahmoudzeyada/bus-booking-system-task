@@ -18,7 +18,7 @@ class Seat extends Model
     {
         return $this->belongsTo('App\Models\TripStation', 'end_station');
     }
-    public function seats()
+    public function user_seat()
     {
         return $this->belongsToMany('App\Models\User')->using('App\Models\UserSeat');
     }

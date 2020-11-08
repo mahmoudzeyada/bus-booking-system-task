@@ -14,8 +14,10 @@ class Trip extends Model
         'numberOfSeats'
     ];
 
-    public function trips()
+    public function stations()
     {
         return $this->belongsToMany('App\Models\Station')->using('App\Models\TripStation');
     }
+
+   
 }

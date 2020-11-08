@@ -40,7 +40,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function users()
+    public function seats()
     {
         return $this->belongsToMany('App\Models\Seat')->using('App\Models\UserSeat');
     }
