@@ -13,7 +13,7 @@ class CreateTripsstationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tripsstations', function (Blueprint $table) {
+        Schema::create('station_trip', function (Blueprint $table) {
             $table->id();
             $table->foreignId('trip_id');
             $table->foreignId('station_id');
@@ -29,6 +29,6 @@ class CreateTripsstationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tripsstations');
+        Schema::dropIfExists('station_trip');
     }
 }
