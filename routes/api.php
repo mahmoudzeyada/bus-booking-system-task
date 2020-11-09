@@ -15,11 +15,4 @@ use App\Http\Controllers\API\TripController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
-Route::apiResources([
-    'trips' => TripController::class,
-]);
+Route::get('trips/{name}', [TripController::class, 'show']);
