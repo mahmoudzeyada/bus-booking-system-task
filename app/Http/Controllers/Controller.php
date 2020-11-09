@@ -13,6 +13,9 @@ class Controller extends BaseController
 
     public function sendResponse($result, $message)
     {
+        if (!$message) {
+            $message = 'response sent successfully';
+        }
     	$response = [
             'success' => true,
             'data'    => $result,
