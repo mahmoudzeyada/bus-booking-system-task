@@ -8,11 +8,11 @@ use App\Models\Station;
 
 class StationSeeder extends Seeder
 {
-    
+
     public function run()
     {
-       
-        Station::factory(50)->create();
+
+        Station::factory(3)->create();
 
     }
 }
