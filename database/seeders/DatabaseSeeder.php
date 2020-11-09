@@ -14,12 +14,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\User::factory(10)->create();
-       
+
         $this->call([
             UserSeeder::class,
             TripSeeder::class,
             StationSeeder::class,
-            StationTripSeeder::class
+            StationTripSeeder::class,
+            SeatSeeder::class
         ]);
     }
 }
