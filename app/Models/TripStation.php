@@ -13,6 +13,8 @@ class TripStation extends Pivot
         'rank',
     ];
 
+    protected $table = 'station_trip';
+
     public function seats()
     {
         return $this->hasMany('App\Models\Seat');
