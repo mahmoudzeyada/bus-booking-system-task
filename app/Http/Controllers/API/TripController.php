@@ -11,13 +11,6 @@ use App\Models\Station;
 use Illuminate\Support\Facades\Validator;
 class TripController extends Controller
 {
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request, $name)
     {
         // validaing
