@@ -1,61 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## About Task
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+this is a hiring task. which solves bus-booking system.
 
-## About Laravel
+### Technologies used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   Php
+-   Laravel
+-   MySql
+-   Nginx
+-   Docker
+-   Docker Compose
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Task Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+this task have 3 docker containers one for the app , another one for the db and another for the web.
 
-## Learning Laravel
+-   clone the repo and cd to repo directory.
+-   make a copy of .env.example to file .env
+    `cp .env.example .env`
+-   for simplicity sake make copy of these variables to env file
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=your_mysql_root_password
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   run this command to start the containers
+    `docker-compose up -d`
+    -run these commands to set up app container
+    `docker-compose exec app php artisan key:generate`
+    `docker-compose exec app php artisan config:cache`
+    `docker-compose exec app composer install`
+    `docker-compose exec app php artisan migrate`
+    `docker-compose exec app php artisan migrate:fresh --seed`
 
-## Laravel Sponsors
+## Declaration
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+first i want to declare that is my first time ever writing php so to solve this task i focused on solving the problem mainly so i did not use some featurtes in the framework that could take my some times to learn instead of solving the problem like:
 
-### Premium Partners
+## features not used
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+-   depency injection in laravel.
+-   Eloquent Relations.
 
-## Contributing
+i didnot make authorization and authentication system i choosed to solve the problem instead of just writing some boilerblat code thats takes amount of time.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+i choosed rest instead of graphql because i want to avoid a the overhead for choosing and installing library for graphql and works well with laravel other wise i well choose graphql.
 
-## Code of Conduct
+i choosed mysql over any relation databases because php and mysql are good friend and i choosed the one that i am not suffer for mainting db otherwise i well choose postgres.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## My Solving Description
 
-## Security Vulnerabilities
+you will find in the main directory 2 files one for usecase diagrams and modules called UseCase.drawio and Erd.drawio for database diagram
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+so each trip has number of stations each station has rank station are order by rank like the following:
+1-cairo 0 -> start_of_line
+2-mansora 1
+3-dametta 2
+4-bortsaid 3 -> end_of_line
 
-## License
+so here if we want to compute number of avaliable seats in mansora we should count the number of seats in dametta and bortsaid as (start or end station) and the number of start station in mansora and substarct that with the original number of seat of the trip.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+and each seat has start_station and end_station.
