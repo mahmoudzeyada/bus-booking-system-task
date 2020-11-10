@@ -24,7 +24,7 @@ class TripFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'numberOfSeats' => $this->faker->randomDigitNot(0)
+            'numberOfSeats' => 12
         ];
     }
 }
