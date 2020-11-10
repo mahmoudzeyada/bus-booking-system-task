@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\TripStation;
 use App\Models\Seat;
 use App\Models\Station;
+use Illuminate\Support\Facades\Validator;
 class TripController extends Controller
 {
 
@@ -17,17 +18,60 @@ class TripController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $name)
     {
-        $request->validate([
-        'name' => ['required', 'max:255'],
-        ]);
+        // validaing
+        $trip = Trip::where('name',$name)->first();
+        if (!$trip) {
+            return $this->sendError('trip not found', [], 404);
+        }
+        // validating input
+        $validator = Validator::make(request()->all(), [
+            'start_station_name' => ['required', 'max:255'],
+            'end_station_name' => ['required', 'max:255']
+       ]);
+        if ($validator->fails()) {
+           return $this->sendError('validation error', $validator->errors()->getMessages(), 400);
+        };
+        // checking if names exists
+        $start_station = Station::where('name', $request->start_station_name)->first();
+        if (!$start_station) {
+            return $this->sendError('start_station_not_exist', [], 400);
+        };
+        $end_station = Station::where('name', $request->end_station_name)->first();
+        if (!$end_station) {
+            return $this->sendError('end_station_not_exist', [], 400);
+        };
+        // check if they in the same trip
+        $start_station_trip = TripStation::where('station_id', $start_station->id)->where('trip_id', $trip->id)->first();
+        if (!$start_station_trip) {
+            return $this->sendError('start station not exist in this trip', [], 400);
+        }
+        $end_station_trip = TripStation::where('station_id', $end_station->id)->where('trip_id', $trip->id)->first();
+        if (!$end_station_trip) {
+            return $this->sendError('end station not exist in this trip', [], 400);
+        }
+        // check for rank
+        if($start_station_trip->rank > $end_station_trip->rank) {
+            return $this->sendError('end station can not be before start station', [], 400);
+        }
+        if($start_station_trip->rank == $end_station_trip->rank) {
+            return $this->sendError('end station can not be start station', [], 400);
+        }
+        // check for avaliable seats
+        $avalibale_seats_array = $this->number_of_avaliable_seats_for_each_station_in_trip($trip);
+        $remaining_seats = $this->get_remaining_seats_for_station($avalibale_seats_array, $start_station);
 
-        $trip = Trip::create([
-            'name' => $request->get('name'),
-        ]);
+        if (!$remaining_seats) {
+            return $this->sendError('there is no seats left in this start station', [], 406);
+        }
+        //creating seat
+        $seat = new Seat();
+        $seat->start_station = $start_station_trip->id;
+        $seat->end_station = $end_station_trip->id;
+        $seat->save();
 
-        return $this->sendResponse($trip,'trip created sussfully');
+        return $this->sendResponse($seat,'seat has been reserved successfully');
     }
 
 
@@ -36,7 +80,7 @@ class TripController extends Controller
         // validaing
         $trip = Trip::where('name',$name)->first();
         if (!$trip) {
-            return $this->sendError('trip not found', []);
+            return $this->sendError('trip not found', [], 404);
         }
         $trip->avalibale_seats = $this->number_of_avaliable_seats_for_each_station_in_trip($trip);
         return $this->sendResponse($trip, '');
@@ -84,6 +128,17 @@ class TripController extends Controller
             }
         }
         return $new_array;
+    }
+
+    private function get_remaining_seats_for_station($array, $station) {
+        $remaining_seats = 0;
+        foreach($array as $rank => $obj) {
+            if ($station->id == $obj->station->id) {
+                $remaining_seats = $obj->remaining_seats;
+                break;
+            }
+        }
+        return $remaining_seats;
     }
 
 

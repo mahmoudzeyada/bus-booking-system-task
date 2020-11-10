@@ -16,3 +16,4 @@ use App\Http\Controllers\API\TripController;
 */
 
 Route::get('trips/{name}', [TripController::class, 'show']);
+Route::post('trips/{name}', [TripController::class, 'store']);
