@@ -72,3 +72,7 @@ there is 2 api endpoint.
 
 -   get trips/{name} this well get avaliable seats in each station in the trip
 -   post trips/{name} this well reserv seat if avaliable you must give the start and end station names in the body of the post request ex `{ 'start_station_name': 'test1','end_station_name':test2}`
+
+## notes
+
+since i didnot have time to make tests you can increase the number of genartated data in both trip and station factories.
